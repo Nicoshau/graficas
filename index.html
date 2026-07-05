@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Derechos de Libertad e Igualdad</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ======================================================================
+   1) TOKENS DE DISEÑO — Cambia aquí la paleta de colores general
+   ====================================================================== */
+:root{
+  --verde:          #c4dc49;
+  --verde-oscuro:   #426c36;
+  --morado:         #8b3ff0;
+  --morado-oscuro:  #3b0f70;
+  --amarillo:       #ffd400;
+  --amarillo-oscuro:#e0a300;
+  --tinta:          #1a1033;
+  --blanco:         #ffffff;
+  --gris-suave:     #f5f2fb;
+  --sombra:         rgba(26,16,51,.18);
+
+  --font-display: 'Fredoka', sans-serif;
+  --font-body:    'Poppins', sans-serif;
+
+  --radio-xl: 32px;
+  --radio-lg: 24px;
+  --radio-md: 16px;
+}
+
+*{ box-sizing: border-box; }
+html,body{ margin:0; padding:0; }
+
+body{
+  font-family: var(--font-body);
+  background: var(--gris-suave);
+  color: var(--tinta);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+h1,h2,h3{ font-family: var(--font-display); margin:0; }
+
+button{ font-family: inherit; cursor:pointer; border:none; background:none; }
+
+/* Foco visible para accesibilidad con teclado */
+a:focus-visible, button:focus-visible{
+  outline: 3px solid var(--morado-oscuro);
+  outline-offset: 3px;
+}
+
+/* ======================================================================
+   2) FORMAS DECORATIVAS FLOTANTES (estilo "blobs" tipo Canva)
+   ====================================================================== */
+.blob{
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(2px);
+  opacity: .55;
+  z-index: 0;
+  pointer-events: none;
+  animation: flotar 9s ease-in-out infinite;
+}
+.blob-1{ width:260px; height:260px; background: var(--verde); top:-80px; left:-80px; }
+.blob-2{ width:200px; height:200px; background: var(--amarillo); top:20%; right:-90px; animation-delay: -3s; }
+.blob-3{ width:180px; height:180px; background: var(--morado); bottom:-60px; left:8%; animation-delay: -6s; }
+.blob-4{ width:140px; height:140px; background: var(--amarillo); bottom:10%; right:12%; animation-delay: -1.5s; }
+
+@keyframes flotar{
+  0%,100%{ transform: translateY(0) translateX(0) rotate(0deg); }
+  50%{ transform: translateY(-25px) translateX(15px) rotate(8deg); }
+}
+
+/* ======================================================================
+   3) CONTENEDOR PRINCIPAL Y PÁGINAS (SPA)
+   ====================================================================== */
+#app{
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 20px 80px;
+}
+
+.page{ display:none; }
+.page.active{
+  display:block;
+  animation: entradaPagina .6s cubic-bezier(.22,.9,.32,1) both;
+}
+.page.saliendo{
+  animation: salidaPagina .28s ease both;
+}
+
+@keyframes entradaPagina{
+  from{ opacity:0; transform: translateY(28px); }
+  to{ opacity:1; transform: translateY(0); }
+}
+@keyframes salidaPagina{
+  to{ opacity:0; transform: translateY(-18px); }
+}
+
+/* ======================================================================
+   4) PÁGINA DE INICIO
+   ====================================================================== */
+
+/* Botón flotante "Volver" (regresa a un sitio externo) */
+.btn-volver-externo{
+  position: fixed;
+  top: 22px;
+  left: 22px;
+  z-index: 50;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding: 12px 22px 12px 16px;
+  background: linear-gradient(135deg, var(--morado-oscuro), var(--morado));
+  color: var(--blanco);
+  border-radius: 999px;
+  font-weight:600;
+  font-size: 15px;
+  box-shadow: 0 8px 20px var(--sombra);
+  transition: transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s ease;
+}
+.btn-volver-externo svg{ width:18px; height:18px; }
+.btn-volver-externo:hover{
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0 14px 26px var(--sombra);
+}
+
+.hero{
+  text-align:center;
+  padding: 100px 10px 40px;
+  animation: entradaPagina .8s ease both;
+}
+.hero .eyebrow{
+  display:inline-block;
+  background: var(--blanco);
+  color: var(--morado-oscuro);
+  font-weight:600;
+  font-size: 13px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 999px;
+  box-shadow: 0 4px 14px var(--sombra);
+  margin-bottom: 18px;
+}
+.hero h1{
+  font-size: clamp(2rem, 5.5vw, 3.4rem);
+  line-height: 1.15;
+  color: var(--tinta);
+  max-width: 900px;
+  margin: 0 auto 16px;
+}
+.hero h1 .resaltado{
+  background: linear-gradient(135deg, var(--verde-oscuro), var(--morado));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero p.subtitulo{
+  max-width: 620px;
+  margin: 0 auto;
+  font-size: 17px;
+  color: #4b3f66;
+  line-height: 1.6;
+}
+
+/* Tarjetas grandes de navegación */
+.cards-grid{
+  display:grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 26px;
+  margin-top: 48px;
+}
+.card{
+  position:relative;
+  text-align:left;
+  padding: 32px 28px;
+  border-radius: var(--radio-xl);
+  color: var(--blanco);
+  min-height: 190px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  gap:8px;
+  box-shadow: 0 12px 26px var(--sombra);
+  transition: transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .35s ease;
+  overflow:hidden;
+}
+.card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: rgba(255,255,255,0);
+  transition: background .3s ease;
+}
+.card:hover{
+  transform: translateY(-10px) rotate(-0.6deg) scale(1.015);
+  box-shadow: 0 22px 38px var(--sombra);
+}
+.card:hover::before{ background: rgba(255,255,255,.06); }
+.card .icono{
+  font-size: 42px;
+  line-height:1;
+  margin-bottom: 6px;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,.15));
+}
+.card h2{
+  font-size: 22px;
+  color: var(--blanco);
+}
+.card p{
+  margin:0;
+  font-size: 14.5px;
+  opacity:.92;
+  line-height:1.5;
+  max-width: 90%;
+}
+.card .flecha{
+  position:absolute;
+  top:26px; right:26px;
+  width:38px; height:38px;
+  border-radius:50%;
+  background: rgba(255,255,255,.25);
+  display:flex; align-items:center; justify-content:center;
+  transition: transform .3s ease;
+}
+.card:hover .flecha{ transform: translateX(4px) rotate(45deg); }
+.card .flecha svg{ width:18px; height:18px; }
+
+/* Combinaciones de color de las 4 tarjetas — cámbialas si quieres otro estilo */
+.card-1{ background: linear-gradient(135deg, var(--verde), var(--verde-oscuro)); }
+.card-2{ background: linear-gradient(135deg, var(--morado), #6423c4); }
+.card-3{ background: linear-gradient(135deg, var(--amarillo-oscuro), var(--amarillo)); color: var(--tinta); }
+.card-3 .flecha{ background: rgba(26,16,51,.15); }
+.card-4{ background: linear-gradient(135deg, var(--morado-oscuro), var(--verde-oscuro)); }
+
+/* ======================================================================
+   5) SUB-PÁGINAS (estructura común)
+   ====================================================================== */
+.btn-volver-inicio{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding: 10px 20px 10px 14px;
+  background: var(--blanco);
+  color: var(--tinta);
+  font-weight:600;
+  font-size: 14.5px;
+  border-radius: 999px;
+  box-shadow: 0 6px 16px var(--sombra);
+  margin-bottom: 28px;
+  transition: transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s ease;
+}
+.btn-volver-inicio svg{ width:16px; height:16px; }
+.btn-volver-inicio:hover{
+  transform: translateX(-4px);
+  box-shadow: 0 10px 20px var(--sombra);
+}
+
+.subpage-header{
+  border-radius: var(--radio-xl);
+  padding: 40px 34px;
+  color: var(--blanco);
+  margin-bottom: 30px;
+  position:relative;
+  overflow:hidden;
+}
+.subpage-header .eyebrow{
+  display:inline-block;
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  background: rgba(255,255,255,.22);
+  padding: 5px 14px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+.subpage-header h2{
+  font-size: clamp(1.6rem, 4vw, 2.3rem);
+  margin-bottom: 8px;
+}
+.subpage-header p{
+  max-width: 640px;
+  font-size: 15px;
+  opacity: .95;
+  line-height:1.55;
+  margin:0;
+}
+
+/* Temas de color por sub-página — cámbialos si quieres otra combinación */
+.header-1{ background: linear-gradient(120deg, var(--verde-oscuro), var(--verde)); }
+.header-2{ background: linear-gradient(120deg, #6423c4, var(--morado)); }
+.header-3{ background: linear-gradient(120deg, var(--amarillo-oscuro), var(--amarillo)); color: var(--tinta); }
+.header-4{ background: linear-gradient(120deg, var(--morado-oscuro), var(--verde-oscuro)); }
+
+/* Grilla de contenido: gráfica + información */
+.content-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: stretch;
+}
+
+/* --- Caja de la gráfica --- */
+.chart-box{
+  background: var(--blanco);
+  border-radius: var(--radio-lg);
+  padding: 28px;
+  box-shadow: 0 10px 26px var(--sombra);
+  display:flex;
+  flex-direction:column;
+}
+.chart-box h3{
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+.chart-box .chart-caption{
+  font-size:13px;
+  color:#6a5c86;
+  margin-bottom: 20px;
+}
+.chart-area{
+  flex:1;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  gap: 46px;
+  height: 230px;
+  padding-top: 10px;
+}
+.barra-columna{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  height: 230px; /* alto FIJO en px (no %), necesario para que la barra escale bien */
+  justify-content:flex-end;
+  width: 90px;
+}
+.barra-valor{
+  font-family: var(--font-display);
+  font-weight:600;
+  font-size: 17px;
+  margin-bottom: 8px;
+}
+.barra{
+  width: 64px;
+  border-radius: 14px 14px 6px 6px;
+  transition: height 1s cubic-bezier(.16,1,.3,1);
+  height: 0px; /* la altura real (en PX) la pone JS al cargar, ver ALTURA_MAX_PX */
+  box-shadow: 0 6px 14px rgba(0,0,0,.12);
+}
+.barra-etiqueta{
+  margin-top: 12px;
+  font-weight:600;
+  font-size: 14px;
+  color: var(--tinta);
+}
+.chart-legend{
+  display:flex;
+  gap:18px;
+  justify-content:center;
+  margin-top: 18px;
+  flex-wrap:wrap;
+}
+.legend-item{ display:flex; align-items:center; gap:7px; font-size:13px; color:#4b3f66; }
+.legend-dot{ width:11px; height:11px; border-radius:50%; }
+
+/* --- Caja de información --- */
+.info-box{
+  border-radius: var(--radio-lg);
+  padding: 30px;
+  box-shadow: 0 10px 26px var(--sombra);
+  background: var(--blanco);
+  border: 3px solid var(--borde-info, var(--morado));
+  display:flex;
+  flex-direction:column;
+  gap: 22px;
+}
+.info-box .bloque .rotulo{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight:600;
+  letter-spacing:.05em;
+  text-transform: uppercase;
+  color: var(--blanco);
+  background: var(--borde-info, var(--morado));
+  padding: 5px 14px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+}
+.info-box .bloque p{
+  margin:0;
+  line-height: 1.65;
+  font-size: 15.5px;
+  color: #2c2140;
+}
+.info-box .bloque .pregunta-texto{
+  font-family: var(--font-display);
+  font-weight:600;
+  font-size: 18px;
+  color: var(--tinta);
+  line-height:1.4;
+}
+
+/* Bordes/acentos de la caja de información por sub-página */
+#pagina1 .info-box{ --borde-info: var(--verde-oscuro); }
+#pagina2 .info-box{ --borde-info: var(--morado); }
+#pagina3 .info-box{ --borde-info: var(--amarillo-oscuro); }
+#pagina4 .info-box{ --borde-info: var(--morado-oscuro); }
+
+/* ======================================================================
+   6) RESPONSIVE
+   ====================================================================== */
+@media (max-width: 860px){
+  .cards-grid{ grid-template-columns: 1fr; }
+  .content-grid{ grid-template-columns: 1fr; }
+  .hero{ padding-top: 130px; }
+}
+
+@media (max-width: 520px){
+  #app{ padding: 16px 14px 60px; }
+  .btn-volver-externo{ top:14px; left:14px; padding:10px 16px 10px 12px; font-size:13.5px; }
+  .hero{ padding-top: 120px; }
+  .subpage-header{ padding: 30px 22px; }
+  .chart-area{ gap: 26px; }
+  .barra{ width:52px; }
+  .barra-columna{ width:72px; }
+}
+
+/* Respeta la preferencia de "reducir movimiento" */
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration: .001s !important; transition-duration: .001s !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- Formas decorativas de fondo -->
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+<div class="blob blob-4"></div>
+
+<div id="app">
+
+  <!-- ==================================================================
+       PÁGINA PRINCIPAL (INICIO)
+       ================================================================== -->
+  <section id="inicio" class="page active">
+
+    <!-- Botón flotante que regresa a un sitio externo -->
+    <!-- 🔧 Cambia la URL dentro de volverExterno() más abajo en el JS -->
+    <button class="btn-volver-externo" onclick="volverExterno()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>
+      Volver
+    </button>
+
+    <div class="hero">
+      <span class="eyebrow">Educación de los Derechos Humanos</span>
+      <!-- 🔧 Cambia el texto del título principal aquí -->
+      <h1>Gráficas acerca de los derechos de <span class="resaltado">libertad de acción</span> y el derecho a la <span class="resaltado">libertad e igualdad</span></h1>
+      <p class="subtitulo">Observa como los estudiantes del I.P.C. respondieron la encuensta junto la explicación del resultado.</p>
+    </div>
+
+    <!-- Tarjetas de navegación hacia las 4 sub-pestañas -->
+    <div class="cards-grid">
+
+      <button class="card card-1" onclick="mostrarPagina('pagina1')">
+        <span class="flecha"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span>
+        <span class="icono">📢</span>
+        <h2>Defiende tus Derechos</h2>
+        <p>Hablar con respeto fortalece la convivencia.</p>
+      </button>
+
+      <button class="card card-2" onclick="mostrarPagina('pagina2')">
+        <span class="flecha"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span>
+        <span class="icono">🚶</span>
+        <h2>Decide con Libertad</h2>
+        <p>Nadie debe limitar tus decisiones injustamente.</p>
+      </button>
+
+      <button class="card card-3" onclick="mostrarPagina('pagina3')">
+        <span class="flecha"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span>
+        <span class="icono">⚖️</span>
+        <h2>Sin Discriminación</h2>
+        <p>Todas las personas merecen el mismo trato ante la ley.</p>
+      </button>
+
+      <button class="card card-4" onclick="mostrarPagina('pagina4')">
+        <span class="flecha"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span>
+        <span class="icono">🌎</span>
+        <h2>Diversidad que Nos Une</h2>
+        <p>Respetar las ideas, culturas y creencias nos hace una mejor sociedad.</p>
+      </button>
+
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       SUB-PÁGINA 1 — Libertad de Expresión
+       ================================================================== -->
+  <section id="pagina1" class="page">
+    <button class="btn-volver-inicio" onclick="mostrarPagina('inicio')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>
+      Volver al inicio
+    </button>
+
+    <div class="subpage-header header-1">
+      <span class="eyebrow">Derecho 1 de 4</span>
+      <h2>📢 Defiende tus derechos</h2>
+      <p>Hablar con respeto fortalece la convivencia.</p>
+    </div>
+
+    <div class="content-grid">
+      <!-- GRÁFICA — los valores se cambian en el bloque <script> (objeto CHART_DATA, clave "pagina1") -->
+      <div class="chart-box">
+        <h3>Resultado de la encuesta: 3ro.Básico "A" y "B"</h3>
+        <p class="chart-caption">Pregunta: ¿Denunciarías un acto de discriminación?</p>
+        <div class="chart-area" id="chart-pagina1"><!-- Las barras se generan con JavaScript --></div>
+        <div class="chart-legend" id="legend-pagina1"></div>
+      </div>
+
+      <!-- INFORMACIÓN — cambia estos textos directamente en el HTML -->
+      <div class="info-box">
+        <div class="bloque">
+          <span class="rotulo">La pregunta</span>
+          <p class="pregunta-texto">¿Estarías dispuesto a denunciar formalmente un acto de discriminación si ocurriera dentro de tu establecimiento educativo?</p>
+        </div>
+        <div class="bloque">
+          <span class="rotulo">Dato interesante</span>
+          <p>Todos los estudiantes encuestados respondieron que denunciarían un acto de discriminación, demostrando un fuerte compromiso con el respeto y la convivencia.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       SUB-PÁGINA 2 — Libertad de Movimiento
+       ================================================================== -->
+  <section id="pagina2" class="page">
+    <button class="btn-volver-inicio" onclick="mostrarPagina('inicio')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>
+      Volver al inicio
+    </button>
+
+    <div class="subpage-header header-2">
+      <span class="eyebrow">Derecho 2 de 4</span>
+      <h2>🚶 Decide con Libertad</h2>
+      <p>Nadie debe limitar tus decisiones injustamente.</p>
+    </div>
+
+    <div class="content-grid">
+      <div class="chart-box">
+        <h3>Resultado de la encuesta: 4to.Compu "A" y "B"</h3>
+        <p class="chart-caption">Pregunta: ¿Cambiarías tu forma de ser para encajar?</p>
+        <div class="chart-area" id="chart-pagina2"></div>
+        <div class="chart-legend" id="legend-pagina2"></div>
+      </div>
+
+      <div class="info-box">
+        <div class="bloque">
+          <span class="rotulo">La pregunta</span>
+          <p class="pregunta-texto">¿Te has sentido presionado a cambiar tu forma de hablar o actuar para encajar?</p>
+        </div>
+        <div class="bloque">
+          <span class="rotulo">Dato interesante</span>
+          <p>La mayoría de los estudiantes ha sentido presión por cambiar su forma de ser para sentirse aceptados.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       SUB-PÁGINA 3 — Igualdad ante la Ley
+       ================================================================== -->
+  <section id="pagina3" class="page">
+    <button class="btn-volver-inicio" onclick="mostrarPagina('inicio')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>
+      Volver al inicio
+    </button>
+
+    <div class="subpage-header header-3">
+      <span class="eyebrow">Derecho 3 de 4</span>
+      <h2>⚖️ Sin Discriminación</h2>
+      <p>Todas las personas merecen el mismo trato ante la ley.</p>
+    </div>
+
+    <div class="content-grid">
+      <div class="chart-box">
+        <h3>Resultado de la encuesta: 4to.Compu "A" y "B"</h3>
+        <p class="chart-caption">Pregunta: ¿La ley trata igual a todas las personas?</p>
+        <div class="chart-area" id="chart-pagina3"></div>
+        <div class="chart-legend" id="legend-pagina3"></div>
+      </div>
+
+      <div class="info-box">
+        <div class="bloque">
+          <span class="rotulo">La pregunta</span>
+          <p class="pregunta-texto">¿Se aplica la ley por igual a indígenas y a ricos en Guatemala?</p>
+        </div>
+        <div class="bloque">
+          <span class="rotulo">Dato interesante</span>
+          <p>Más de la mitad de los estudiantes considera que la igualdad ante la ley aún no se cumple para todas las personas en Guatemala.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       SUB-PÁGINA 4 — Libertad de Pensamiento, Conciencia y Religión
+       ================================================================== -->
+  <section id="pagina4" class="page">
+    <button class="btn-volver-inicio" onclick="mostrarPagina('inicio')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>
+      Volver al inicio
+    </button>
+
+    <div class="subpage-header header-4">
+      <span class="eyebrow">Derecho 4 de 4</span>
+      <h2>🌎 Valora la Diversidad</h2>
+      <p>Las diferencias nos enriquecen como sociedad. </p>
+    </div>
+
+    <div class="content-grid">
+      <div class="chart-box">
+        <h3>Resultado de la encuesta: 4to.Diseño "D"</h3>
+        <p class="chart-caption">Pregunta: ¿Respetas la diversidad cultural?</p>
+        <div class="chart-area" id="chart-pagina4"></div>
+        <div class="chart-legend" id="legend-pagina4"></div>
+      </div>
+
+      <div class="info-box">
+        <div class="bloque">
+          <span class="rotulo">La pregunta</span>
+          <p class="pregunta-texto">¿El sistema educativo te dio herramientas para entender y respetar la historia de las distintas etnias del país?</p>
+        </div>
+        <div class="bloque">
+          <span class="rotulo">Dato interesante</span>
+          <p>Casi todos los estudiantes consideran que la educación les ha ayudado a comprender y respetar la diversidad cultural de Guatemala, fortaleciendo el valor de la convivencia y el respeto por las diferentes culturas.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ==========================================================================
+   NAVEGACIÓN ENTRE PÁGINAS (SPA)
+   ========================================================================== */
+function mostrarPagina(idDestino){
+  const actual   = document.querySelector('.page.active');
+  const destino  = document.getElementById(idDestino);
+  if(!destino || actual === destino) return;
+
+  actual.classList.add('saliendo');
+  setTimeout(() => {
+    actual.classList.remove('active','saliendo');
+    destino.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 260);
+}
+
+/* 🔧 BOTÓN "VOLVER" — pon aquí tu enlace
+   --------------------------------------------------------------------------
+   Si la dejas vacía (""), el botón regresará automáticamente a la
+   página anterior del navegador (comportamiento por defecto). */
+const URL_EXTERNA = "https://misderechoss.my.canva.site/";
+
+function volverExterno(){
+  if(URL_EXTERNA.trim() !== ""){
+    window.location.href = URL_EXTERNA;
+  } else {
+    window.history.back();
+  }
+}
+
+/* ==========================================================================
+   🔧 DATOS DE LAS GRÁFICAS — CAMBIA AQUÍ LOS VALORES Y COLORES
+   --------------------------------------------------------------------------
+   Cada entrada corresponde a una sub-pestaña ("pagina1" a "pagina4").
+     si / no   -> los valores que quieras graficar (pueden ser % o cantidades)
+     colorSi   -> color de la barra "Sí"  (usa los tokens de arriba o un hex)
+     colorNo   -> color de la barra "No"
+   ========================================================================== */
+const CHART_DATA = {
+  pagina1: { si: 21, no: 0, colorSi: "var(--verde-oscuro)",  colorNo: "var(--morado-oscuro)" },
+  pagina2: { si: 6, no: 21, colorSi: "var(--morado)",        colorNo: "var(--amarillo-oscuro)" },
+  pagina3: { si: 11, no: 16, colorSi: "var(--amarillo-oscuro)", colorNo: "var(--morado-oscuro)" },
+  pagina4: { si: 13, no: 1, colorSi: "var(--verde-oscuro)",  colorNo: "var(--morado)" }
+};
+
+/* 🔧 Alto máximo (en PX) que puede alcanzar una barra cuando representa el 100%.
+   Antes esto se manejaba con "height: %", pero al estar la barra dentro de un
+   flex anidado, el navegador NO calculaba bien ese porcentaje y por eso
+   valores muy distintos (ej. 21 y 6) terminaban dibujándose casi con la
+   misma altura. Ahora se calcula la altura real en píxeles en JS, lo cual
+   sí es preciso y consistente en cualquier navegador. */
+const ALTURA_MAX_PX = 170;
+
+/* Construye visualmente cada gráfica de barras a partir de CHART_DATA.
+   No necesitas tocar esta función: solo cambia los valores de arriba. */
+function construirGraficas(){
+  Object.keys(CHART_DATA).forEach(id => {
+    const datos  = CHART_DATA[id];
+    const cont   = document.getElementById('chart-' + id);
+    const legend = document.getElementById('legend-' + id);
+    if(!cont) return;
+
+    const total = datos.si + datos.no;
+    const pctSi = total > 0 ? Math.round((datos.si / total) * 100) : 0;
+    const pctNo = total > 0 ? 100 - pctSi : 0;
+
+    /* Altura en PX proporcional al valor real (no solo al %), redondeada */
+    const pxSi = total > 0 ? Math.round((datos.si / total) * ALTURA_MAX_PX) : 0;
+    const pxNo = total > 0 ? Math.round((datos.no / total) * ALTURA_MAX_PX) : 0;
+
+    cont.innerHTML = `
+      <div class="barra-columna">
+        <span class="barra-valor" style="color:${datos.colorSi}">${datos.si}</span>
+        <div class="barra" style="background:${datos.colorSi}; height:0px" data-altura-px="${pxSi}"></div>
+        <span class="barra-etiqueta">Sí</span>
+      </div>
+      <div class="barra-columna">
+        <span class="barra-valor" style="color:${datos.colorNo}">${datos.no}</span>
+        <div class="barra" style="background:${datos.colorNo}; height:0px" data-altura-px="${pxNo}"></div>
+        <span class="barra-etiqueta">No</span>
+      </div>
+    `;
+
+    if(legend){
+      legend.innerHTML = `
+        <span class="legend-item"><span class="legend-dot" style="background:${datos.colorSi}"></span>Sí (${pctSi}%)</span>
+        <span class="legend-item"><span class="legend-dot" style="background:${datos.colorNo}"></span>No (${pctNo}%)</span>
+      `;
+    }
+  });
+}
+
+/* Anima las barras hacia su altura final (en PX) la primera vez que se ve cada gráfica */
+function animarBarras(idPagina){
+  const barras = document.querySelectorAll('#chart-' + idPagina + ' .barra');
+  barras.forEach(b => {
+    const alturaFinal = b.getAttribute('data-altura-px');
+    requestAnimationFrame(() => { b.style.height = alturaFinal + 'px'; });
+  });
+}
+
+/* Observa cuándo cada sub-página se vuelve visible para animar su gráfica */
+function iniciarObservadorDeGraficas(){
+  const opciones = { threshold: 0.2 };
+  const paginas = ['pagina1','pagina2','pagina3','pagina4'];
+
+  paginas.forEach(id => {
+    const seccion = document.getElementById(id);
+    const observer = new MutationObserver(() => {
+      if(seccion.classList.contains('active')){
+        animarBarras(id);
+      }
+    });
+    observer.observe(seccion, { attributes: true, attributeFilter: ['class'] });
+  });
+}
+
+/* ==========================================================================
+   INICIALIZACIÓN
+   ========================================================================== */
+document.addEventListener('DOMContentLoaded', () => {
+  construirGraficas();
+  iniciarObservadorDeGraficas();
+});
+</script>
+
+</body>
+</html>
